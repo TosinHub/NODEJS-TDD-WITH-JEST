@@ -21,9 +21,9 @@ describe('TODO APP', () => {
             })
   })
 
-    it('GET /todos/id ---> specific todo by ID', () => {
+    it('GET /todos/id ---> specific todo by ID',  () => {
         return request(app)
-        .get('/todos/id')
+        .get('/todos/1')
         .expect('Content-Type', /json/)
         .expect(200)
         .then((response) => {
@@ -37,9 +37,9 @@ describe('TODO APP', () => {
         })
     })
 
-    it('GET /todos/ID  ---> 404 if not found', () => {
+    it('GET /todos/id  ---> 404 if not found', () => {
 
-        return request(app).get('/todos//873434').expect(404)
+        return request(app).get('/todos/873434').expect(404)
 
     })
 
