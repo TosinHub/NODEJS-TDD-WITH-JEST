@@ -2,6 +2,71 @@ const request = require('supertest')
 const app = require('./app')
 
 
-it( 'should run', () =>{
-   
+describe('TODO APP', () => {
+    it('GET /todos  get arrays of todos', () => {
+        return request(app)
+            .get('/todos')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((response) => {
+                expect(response.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining({
+                            id: expect.any(Number), 
+                            name: expect.any(String),
+                            completed: expect.any(Boolean)
+                        })
+                    ])
+                )
+            })
+  })
+
+    it('GET /todos/id ---> specific todo by ID', () => {
+        return request(app)
+        .get('/todos/id')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then((response) => {
+            expect(response.body).toEqual(
+                    expect.objectContaining({
+                        id: expect.any(Number), 
+                        name: expect.any(String),
+                        completed: expect.any(Boolean)
+                    })
+            )
+        })
+    })
+
+    it('GET /todos/ID  ---> 404 if not found', () => {
+
+        return request(app).get('/todos//873434').expect(404)
+
+    })
+
+    it('POST /todos  ---> created todo', () => {
+            return request(app).post('/todos').send({
+                name: 'do dishes'
+
+            })
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .then((response) =>{
+                expect(response.body).toEqual(
+                    expect.objectContaining({
+                        id: expect.any(Number), 
+                        name: 'do dishes',
+                        completed: false
+                    })
+            )
+            })
+    })
+    it('POST /todos  ---> validates request body', () => {
+        return request(app).post(/todos/).send({
+            name: 123
+        }).expect(422)
+    })
+
+
+
 })
+
